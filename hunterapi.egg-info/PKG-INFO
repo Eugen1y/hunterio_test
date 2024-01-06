@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: hunterapi
+Version: 0.1
+Summary: Python client for Hunter.io API
+Home-page: UNKNOWN
+Author: Eugeniy Kolodko
+Author-email: evgeniykolodko@gmail.com
+License: UNKNOWN
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
+
+# HunterAPI
+
+Python client for Hunter.io API.
+
+## Installation
+
+
+## Usage
+
+```python
+from hunterapi.client import HunterAPIClient
+
+api_key = "YOUR_HUNTER_API_KEY"
+client = HunterAPIClient(api_key)
+
+email = "example@email.com"
+verification_result = client.verify_email(email)
+print(verification_result)
+
