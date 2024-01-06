@@ -3,7 +3,8 @@
 Python client for Hunter.io API.
 
 ## Installation
-
+1. **Clone the Repository**: git clone https://github.com/yourusername/hunterio-python-client.git
+2. **Install the package**: pip install .
 
 ## Usage
 
