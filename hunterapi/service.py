@@ -76,7 +76,7 @@ class HunterService(object):
         else:
             raise ValueError('Email {email} not found in saved results'.format(email=email))
 
-    def get_email_count(self, domain):
+    def count_and_save_domain_emails(self, domain):
         """Retrieve data about email counting of the specified domain.
 
         :param domain: Domain address to check

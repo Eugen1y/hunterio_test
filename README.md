@@ -17,3 +17,7 @@ client = HunterAPIClient(api_key)
 email = "example@email.com"
 verification_result = client.verify_email(email)
 print(verification_result)
+
+domain = example.com
+email_count_result = client.count_and_save_domain_emails(domain)
+print(email_count_result)
