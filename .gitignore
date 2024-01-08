@@ -1,3 +1,6 @@
 venv/
 .idea/
 __pycache__/
+hunterapi/__pycache__/
+setup.cfg
+123.py
