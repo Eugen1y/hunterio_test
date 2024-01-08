@@ -76,7 +76,7 @@ class HunterService(object):
         else:
             raise ValueError('Email {email} not found in saved results'.format(email=email))
 
-    def count_and_save_domain_emails(self, domain):
+    def domain_search_and_save(self, domain=None, company=None):
         """Retrieve data about email counting of the specified domain.
 
         :param domain: Domain address to check
@@ -84,6 +84,6 @@ class HunterService(object):
 
         :return: The data with email counting
         """
-        count_result = self.client.get_domain_emails(domain)
+        count_result = self.client.get_domain_emails(domain=domain, company=company)
         self.database.save_result(domain, count_result)
         return count_result
