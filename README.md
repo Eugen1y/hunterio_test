@@ -15,9 +15,12 @@ api_key = "YOUR_HUNTER_API_KEY"
 client = HunterAPIClient(api_key)
 
 email = "example@email.com"
-verification_result = client.verify_email(email)
+verification_result = client.verify_and_save_email(email)
 print(verification_result)
 
 domain = example.com
-email_count_result = client.count_and_save_domain_emails(domain)
-print(email_count_result)
+domain_email_count_result = client.domain_search_and_save(domain)
+print(domain_email_count_result)
+
+company_email_count_result = client.domain_search_and_save(company='Example')
+print(company_email_count_result)
