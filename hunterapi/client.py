@@ -21,19 +21,24 @@ class HunterClient(object):
     def make_endpoint(self, endpoint: str) -> str:
         """Make endpoint address.
 
-        :param endpoint: str
-        :return: endpoint address
+        :param endpoint: endpoint address
+
+        :return: completed endpoint address
         """
         return self.base_endpoint + endpoint
 
     def make_request(self, endpoint: str, request_params: dict, request_type='get', raw=False) -> Dict[str, Any]:
         """Make a request to the hunter.io API.
 
-        :param endpoint: endpoint to send request
-        :param params: parameters to request
+        :param endpoint: endpoint to send request.
+
+        :param request_params: parameters to request.
+
         :param raw: Gives back the entire response instead of just the 'data'.
 
-        :return:
+        :return: dictionary with result of request
+
+        :raises: If the status of request is not ok(200)
         """
         request_kwargs = {'params': request_params}
         res = getattr(requests, request_type)(endpoint, **request_kwargs)
@@ -55,11 +60,10 @@ class HunterClient(object):
         :param email: The email address to be verified.
         :type email: str
 
+        :param raw: Gives back the entire response instead of just the 'data'.
+
         :return: A dictionary containing the verification results.
         :rtype: Dict[str, Any]
-
-        :raises requests.RequestException: If there was an issue with the request.
-
         """
         request_params = {'email': email, 'api_key': self.api_key}
         endpoint = self.make_endpoint('email-verifier')
@@ -72,10 +76,9 @@ class HunterClient(object):
 
         :param company: The name of company to check
 
-        :return: A dictionary containing emails data.
+        :param raw: Gives back the entire response instead of just the 'data'.
 
-        :raises requests.RequestException: If there was an issue with the request.
-
+        :return: A dictionary containing domain/company search data.
         """
         request_params = self.base_params
         if domain:
