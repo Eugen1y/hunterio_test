@@ -1,60 +1,104 @@
 """Module for client."""
 
-from typing import Any, Dict
-
 import requests
 
 
-class HunterClient(object):
-    """Class for interacting with the hunter.io API."""
+class BaseEndpoint(object):
+    """Base class for interacting with hunter.io API endpoints."""
 
     def __init__(self, api_key: str):
-        """Initialize the HunterClient with the specified API key.
+        """Initialize the BaseEndpoint class.
 
-        :param api_key: specified api key for connect to hunter.io API
+        :param api_key: The API key required for authentication.
         """
         self.api_key = api_key
         self.base_endpoint = 'https://api.hunter.io/v2/'
 
-    def make_request(self, endpoint: str, request_params: dict, request_type='get') -> Dict[str, Any]:
-        """Make a request to the hunter.io API.
+    def _send_request(self, endpoint: str, request_params: dict, method: str = 'GET') -> requests.Response:
+        """Send a request to the specified endpoint.
 
-        :param endpoint: address to send request
-        :param request_params: params to send request
-        :param request_type: request type(get,post)
-        :return: dictionary with response data
+        :param endpoint: The URL endpoint to which the request is made.
+        :param request_params: Parameters to be included in the request.
+        :param method: The HTTP method to use for the request (default is 'GET').
+        :return: The response object.
         """
-        request_kwargs = {'params': request_params}
-        endpoint = self.base_endpoint + endpoint
-        res = getattr(requests, request_type)(endpoint, **request_kwargs)
-        res.raise_for_status()
+        response = requests.request(method, endpoint, params=request_params)
+        response.raise_for_status()
+        return response
 
+    def _parse_response(self, response: requests.Response) -> dict:
+        """Parse the response and extract data.
+
+        :param response: The response object from the API request.
+        :return: The parsed data from the response.
+        :raises ValueError: If the response does not contain the expected data structure.
+        """
         try:
-            result_data = res.json()['data']
+            return response.json()['data']
         except KeyError:
-            raise ValueError(res.json())
+            raise ValueError(response.json())
 
-        return result_data
+    def _make_request(self, endpoint: str, request_params: dict, method: str = 'GET') -> dict:
+        """Make a request to the specified endpoint.
 
-    def verify_email(self, email: str) -> Dict[str, Any]:
-        """Verify the specified email address using the hunter.io API.
+        :param endpoint: The URL endpoint to which the request is made.
+        :param request_params: Parameters to be included in the request.
+        :param method: The HTTP method to use for the request (default is 'GET').
+        :return: The parsed data from the response.
+        """
+        response = self._send_request(endpoint, request_params, method)
+        return self._parse_response(response)
 
-        :param email: specified email address to verify
-        :return: making request to specified endpoint
+
+class VerifyEmailEndpoint(BaseEndpoint):
+    """Class for interacting with the verify email endpoint of the hunter.io API."""
+
+    def __init__(self, api_key):
+        """Initialize the VerifyEmailEndpoint class.
+
+        :param api_key: The API key required for authentication.
+        """
+        super().__init__(api_key)
+        self.endpoint = 'email-verifier'
+        self.endpoint = self.base_endpoint + self.endpoint
+
+    def verify_email(self, email: str) -> dict:
+        """Verify the specified email.
+
+        :param email: The email address to be verified.
+        :return: The verification data for the email.
         """
         request_params = {'email': email, 'api_key': self.api_key}
-        return self.make_request(endpoint='email-verifier', request_params=request_params)
+        return self._make_request(self.endpoint, request_params)
 
-    def get_domain_emails(self, domain: str, company: str) -> Dict[str, Any]:
-        """Retrieve the number of email addresses Hunter has for this domain/company.
 
-        :param domain: the specified domain to check
-        :param company: the specified company to check
-        :return: making request to specified endpoint
+class DomainEmailsEndpoint(BaseEndpoint):
+    """Class for interacting with the domain emails endpoint of the hunter.io API."""
+
+    def __init__(self, api_key):
+        """Initialize the DomainEmailsEndpoint class.
+
+        :param api_key: The API key required for authentication.
         """
+        super().__init__(api_key)
+        self.endpoint = 'email-count'
+        self.endpoint = self.base_endpoint + self.endpoint
+
+    def get_domain_emails(self, domain: str = None, company: str = None) -> dict:
+        """Retrieve domain search.
+
+        :param domain: The domain name to search for.
+        :param company: The company name to search for.
+        :return: The data related to the domain or company.
+        :raises ValueError: If neither 'domain' nor 'company' is provided.
+        """
+        if not domain and not company:
+            raise ValueError("Either 'domain' or 'company' must be provided.")
+
         request_params = {'api_key': self.api_key}
         if domain:
             request_params['domain'] = domain
-        elif company:
+        else:
             request_params['company'] = company
-        return self.make_request(endpoint='email-count', request_params=request_params)
+
+        return self._make_request(self.endpoint, request_params)
