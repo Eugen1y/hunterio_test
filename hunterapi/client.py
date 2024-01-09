@@ -22,8 +22,7 @@ class HunterClient(object):
         :param endpoint: address to send request
         :param request_params: params to send request
         :param request_type: request type(get,post)
-        :param raw: Gives back the entire response instead of just the 'data'.
-        :return:
+        :return: dictionary with response data
         """
         request_kwargs = {'params': request_params}
         endpoint = self.base_endpoint + endpoint
