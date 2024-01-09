@@ -85,5 +85,6 @@ class HunterService(object):
         :return: The data with email counting
         """
         count_result = self.client.get_domain_emails(domain=domain, company=company)
-        self.database.save_result(domain, count_result)
+
+        self.database.save_result(domain or company, count_result)
         return count_result
