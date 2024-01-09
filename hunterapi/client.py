@@ -40,13 +40,12 @@ class HunterClient(object):
         """Verify the specified email address using the hunter.io API.
 
         :param email: specified email address to verify
-        :param raw: Gives back the entire response instead of just the 'data'.
         :return: making request to specified endpoint
         """
         request_params = {'email': email, 'api_key': self.api_key}
         return self.make_request(endpoint='email-verifier', request_params=request_params)
 
-    def get_domain_emails(self, domain: str, company: str, raw=False) -> Dict[str, Any]:
+    def get_domain_emails(self, domain: str, company: str) -> Dict[str, Any]:
         """Retrieve the number of email addresses Hunter has for this domain/company.
 
         :param domain: the specified domain to check
