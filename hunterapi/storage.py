@@ -11,51 +11,39 @@ class Database(object):
     def save_result(self, key: str, key_data: dict) -> None:
         """Save result in local storage.
 
-        :param email: The email address to save as a key.
-        :type: str
-
-        :param data: The data to save.
-        :type: Union[Dict[str, Any], str]
+        :param key: The key of a dictionary.
+        :param key_data: The data to save.
         """
         self.verification_results[key] = key_data
 
     def get_result(self, key: str) -> dict:
         """Retrieve data of the specified email.
 
-        :param email: The specified email address for finding in results.
-        :type email: str
-
-        :return: The data from the specified email.
-        :rtype: dict
+        :param key: The specified key of the dictionary for finding in results.
+        :return: The data from the specified key.
         """
         return self.verification_results.get(key, {})
 
-    def has_email(self, email: str) -> bool:
-        """Check if the given email exists in the database.
+    def has_result(self, key: str) -> bool:
+        """Check if the given key exists in the database.
 
-        :param email: The email address to check.
-        :type email: str
+        :param key: The key of the dictionary to check.
 
-        :return: True if the email exists, False otherwise.
-        :rtype: bool
+        :return: True if the result exists, False otherwise.
         """
-        return email in self.verification_results
+        return key in self.verification_results
 
     def update_result(self, key: str, key_data: dict) -> None:
         """Update the saved result for the specified email address.
 
-        :param email: The email address for which to update the result.
-        :type email: str
-
-        :param data: The new data to be saved.
-        :type data: Dict[str, Any]
+        :param key: The key of the dictionary for which to update the result.
+        :param key_data: The new data to be saved.
         """
         self.verification_results[key] = key_data
 
     def delete_result(self, key: str) -> None:
-        """Delete the saved result for the specified email address.
+        """Delete the saved result for the specified key.
 
-        :param email: The email address for which to delete the result.
-        :type email: str
+        :param key: The key of the dictionary for which to delete the result.
         """
         self.verification_results.pop(key)

@@ -51,7 +51,7 @@ class HunterService(object):
 
         :raises ValueError: If the specified email address is not found in the saved results.
         """
-        if self.database.has_email(key):
+        if self.database.has_result(key):
             self.database.update_result(key, email_data)
         else:
             raise ValueError('{key} not found in saved results.'.format(key=key))
@@ -63,7 +63,7 @@ class HunterService(object):
 
         :raises ValueError: If the specified email address is not found in the saved results.
         """
-        if self.database.has_email(key):
+        if self.database.has_result(key):
             self.database.delete_result(key)
         else:
             raise ValueError('{key} not found in saved results.'.format(key=key))
