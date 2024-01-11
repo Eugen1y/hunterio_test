@@ -31,7 +31,7 @@ class Database(object):
         """
         return self.verification_results.get(key, {})
 
-    def has_result(self, key: str) -> bool:
+    def _has_result(self, key: str) -> bool:
         """Check if the given key exists in the database.
 
         :param key: The key of the dictionary to check.
@@ -46,7 +46,7 @@ class Database(object):
         :param key: The key of the dictionary for which to update the result.
         :param key_data: The new data to be saved.
         """
-        if self.has_result(key):
+        if self._has_result(key):
             self.verification_results[key] = key_data
         else:
             raise ValueError('{key} not found in saved results.'.format(key=key))
@@ -56,7 +56,7 @@ class Database(object):
 
         :param key: The key of the dictionary for which to delete the result.
         """
-        if self.has_result(key):
+        if self._has_result(key):
             self.verification_results.pop(key)
         else:
             raise ValueError('{key} not found in saved results.'.format(key=key))
