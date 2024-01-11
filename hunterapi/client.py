@@ -102,3 +102,16 @@ class DomainEmailsEndpoint(BaseEndpoint):
             request_params['company'] = company
 
         return self._make_request(self.endpoint, request_params)
+
+
+class HunterClient(object):
+    """Class for interacting with hunter.io API using endpoints."""
+
+    def __init__(self, api_key: str):
+        """
+        Initialize the HunterClient with the specified API key.
+
+        :param api_key: The API key for accessing the hunter.io API.
+        """
+        self.verify_email_handler = VerifyEmailEndpoint(api_key)
+        self.domain_emails_handler = DomainEmailsEndpoint(api_key)

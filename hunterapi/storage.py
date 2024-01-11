@@ -8,6 +8,13 @@ class Database(object):
         """Initialize the local storage."""
         self.verification_results: dict = {}
 
+    def get_saved_results(self) -> dict:
+        """Retrieve all saved verification results.
+
+        :return: The data with all saved results.
+        """
+        return self.verification_results
+
     def save_result(self, key: str, key_data: dict) -> None:
         """Save result in local storage.
 
@@ -39,11 +46,17 @@ class Database(object):
         :param key: The key of the dictionary for which to update the result.
         :param key_data: The new data to be saved.
         """
-        self.verification_results[key] = key_data
+        if self.has_result(key):
+            self.verification_results[key] = key_data
+        else:
+            raise ValueError('{key} not found in saved results.'.format(key=key))
 
     def delete_result(self, key: str) -> None:
         """Delete the saved result for the specified key.
 
         :param key: The key of the dictionary for which to delete the result.
         """
-        self.verification_results.pop(key)
+        if self.has_result(key):
+            self.verification_results.pop(key)
+        else:
+            raise ValueError('{key} not found in saved results.'.format(key=key))
